@@ -6,8 +6,13 @@ import App from "./components/app";
 const appElt = document.getElementById("app");
 ReactModal.setAppElement(appElt);
 
+// Allow enabling a fake sensor via a URL parameter (?fakeSensor=true) so the app
+// can be tested without real sensor hardware, for example when running as a CODAP plugin.
+const params = new URLSearchParams(window.location.search);
+const fakeSensor = params.get("fakeSensor") === "true";
+
 ReactDOM.render(
   // By default we will be using sensors.
-  <App useSensors={true} displayType={"line"}/>,
+  <App useSensors={true} displayType={"line"} fakeSensor={fakeSensor}/>,
   appElt
 );
