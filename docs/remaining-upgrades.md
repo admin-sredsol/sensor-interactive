@@ -199,12 +199,14 @@ d3-format: 1.4.5 → 3.1.2, @types/d3-format: 1.4.2 → 3.0.4
 ```
 **Impact:** d3-format v3 is ESM-only (`"type": "module"`). Only `precisionFixed` is imported — API unchanged. Updated `jest.config.ts` to transform ESM packages: added `^.+\\.js$` transform and `transformIgnorePatterns` exception for `d3-format`. No source code changes required. Webpack build ✅, Jest 11/11 ✅, ESLint 0 errors ✅.
 
-### PR 10: Cleanup
+### PR 10: Cleanup ✅ COMPLETED
+
 ```
 Remove text-encoding polyfill
-Remove tslint scripts from package.json
-Add ESLint scripts to package.json
+Replace tslint scripts with eslint scripts in package.json
+Add webpack resolve.fallback for text-encoding → false
 ```
+**Impact:** Removed `text-encoding` dependency (polyfill not needed in modern browsers — `TextEncoder`/`TextDecoder` are native). Added `webpack.config.js` resolve.fallback to handle `@vernier/godirect`'s conditional `require("text-encoding")` with an empty module. Replaced `tslint` scripts with `eslint` scripts. Webpack build ✅, Jest 11/11 ✅, ESLint 0 errors ✅.
 
 ---
 
