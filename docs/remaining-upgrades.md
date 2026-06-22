@@ -30,26 +30,26 @@ These are same-major-version updates that should be safe to upgrade in a single 
 
 | Package | Current | Latest | Gap | Notes |
 |---------|---------|--------|-----|-------|
-| `@types/lodash` | `4.14.178` | `4.17.24` | Minor | Type definitions only |
-| `@types/semver` | `7.3.9` | `7.7.1` | Minor | Type definitions only |
-| `@types/web-bluetooth` | `0.0.12` | `0.0.21` | Patch | Type definitions only |
-| `dygraphs` | `2.1.0` | `2.2.1` | Minor | Charting library, no breaking changes |
-| `eslint-plugin-import` | `2.25.4` | `2.32.0` | Minor | Same major |
-| `html-webpack-plugin` | `5.5.3` | `5.6.7` | Minor | Same major |
-| `lodash` | `4.17.21` | `4.18.1` | Patch | Same major |
-| `postcss` | `8.4.38` | `8.5.15` | Minor | Same major |
-| `semver` | `7.3.5` | `7.8.5` | Minor | Same major |
-| `ts-loader` | `9.5.1` | `9.6.1` | Patch | Same major |
-| `webpack` | `5.76.0` | `5.107.2` | Minor | Same major, many bug fixes |
-| `@typescript-eslint/eslint-plugin` | `5.10.2` | `5.62.0` | Minor | Same major (v5) |
-| `@typescript-eslint/parser` | `5.10.2` | `5.62.0` | Minor | Same major (v5) |
-| `eslint` | `8.8.0` | `8.57.1` | Minor | Same major (v8) |
-| `eslint-config-prettier` | `8.3.0` | `8.10.2` | Minor | Same major (v8) |
-| `eslint-plugin-jsdoc` | `37.7.0` | `37.9.7` | Minor | Same major (v37) |
-| `css-loader` | `6.6.0` | `6.11.0` | Minor | Same major (v6) |
-| `cypress` | `13.12.0` | `13.17.0` | Minor | Same major (v13) |
-| `@vernier/godirect` | `1.7.1` | `1.8.3` | Minor | Sensor library, no React dep |
-| `iframe-phone` | `1.3.1` | `1.4.0` | Minor | PostMessage library |
+| `@types/lodash` | `4.14.178` | `4.17.24` | Minor | ✅ Done in PR1 |
+| `@types/semver` | `7.3.9` | `7.7.1` | Minor | ✅ Done in PR1 |
+| `@types/web-bluetooth` | `0.0.12` | `0.0.21` | Patch | ✅ Done in PR1 |
+| `dygraphs` | `2.1.0` | `2.2.1` | Minor | ✅ Done in PR1 |
+| `eslint-plugin-import` | `2.25.4` | `2.32.0` | Minor | ✅ Done in PR1 |
+| `html-webpack-plugin` | `5.5.3` | `5.6.7` | Minor | ✅ Done in PR1 |
+| `lodash` | `4.17.21` | `4.18.1` | Patch | ✅ Done in PR1 |
+| `postcss` | `8.4.38` | `8.5.15` | Minor | ✅ Done in PR1 |
+| `semver` | `7.3.5` | `7.8.5` | Minor | ✅ Done in PR1 |
+| `ts-loader` | `9.5.1` | `9.6.1` | Patch | ✅ Done in PR1 |
+| `webpack` | `5.76.0` | `5.107.2` | Minor | ✅ Done in PR1 |
+| `@typescript-eslint/eslint-plugin` | `5.10.2` | `5.62.0` | Minor | ✅ Done in PR1 |
+| `@typescript-eslint/parser` | `5.10.2` | `5.62.0` | Minor | ✅ Done in PR1 |
+| `eslint` | `8.8.0` | `8.57.1` | Minor | ✅ Done in PR1 |
+| `eslint-config-prettier` | `8.3.0` | `8.10.2` | Minor | ✅ Done in PR1 |
+| `eslint-plugin-jsdoc` | `37.7.0` | `37.9.7` | Minor | ✅ Done in PR1 |
+| `css-loader` | `6.6.0` | `6.11.0` | Minor | ✅ Done in PR1 |
+| `cypress` | `13.12.0` | `13.17.0` | Minor | ✅ Done in PR1 |
+| `@vernier/godirect` | `1.7.1` | `1.8.3` | Minor | ⚠️ Skipped — v1.8 uses ESM, breaks Jest |
+| `iframe-phone` | `1.3.1` | `1.4.0` | Minor | ✅ Done in PR1 |
 
 **Recommended:** Bundle these into one PR. Run `npm update` then verify build + tests.
 
@@ -122,15 +122,19 @@ These require significant code changes and careful testing.
 
 ## 📋 Recommended Upgrade Order
 
-### PR 1: Safe Minor Updates (Quick Win)
+### PR 1: Safe Minor Updates ✅ COMPLETED
+
 ```
-@types/lodash, @types/semver, @types/web-bluetooth, dygraphs,
+@types/lodash, @types/semver, @types/web-bluetooth, @types/jest, dygraphs,
 eslint-plugin-import, html-webpack-plugin, lodash, postcss, semver,
 ts-loader, webpack, @typescript-eslint/* (v5 latest), eslint (v8 latest),
 eslint-config-prettier (v8 latest), eslint-plugin-jsdoc (v37 latest),
-css-loader (v6 latest), cypress (v13 latest), @vernier/godirect, iframe-phone
+css-loader (v6 latest), cypress (v13 latest), @simonsmith/cypress-image-snapshot (v9 latest),
+shutterbug, jquery (v3 latest), iframe-phone, style-loader (v3 latest)
 ```
-**Risk:** Very low. `npm update` should handle most of these.
+**Risk:** Very low. All same-major-version updates.
+**Result:** Build passes, 11/11 Jest tests pass, Cypress smoke test passes.
+**Note:** `@vernier/godirect` v1.8 was skipped — it uses ESM which breaks Jest.
 
 ### PR 2: Slate Editor Upgrade (Biggest Impact)
 ```
