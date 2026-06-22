@@ -192,11 +192,12 @@ jquery: 3.7.1 → 4.0.0
 ```
 **Impact:** No code changes required. jQuery is only used as a dependency of `shutterbug` (v1.5.0), which uses `$.Deferred`, `$.ajax`, `$.when`, and `$(selector)` — all preserved in jQuery v4. No direct jQuery usage exists in sensor-interactive source code. Webpack build ✅, Jest 11/11 ✅, ESLint 0 errors ✅.
 
-### PR 9: D3 Format v3
+### PR 9: D3 Format v3 ✅ COMPLETED
+
 ```
-d3-format: 1 → 3, @types/d3-format: 1 → 3
+d3-format: 1.4.5 → 3.1.2, @types/d3-format: 1.4.2 → 3.0.4
 ```
-**Risk:** Low-medium. Check format string compatibility.
+**Impact:** d3-format v3 is ESM-only (`"type": "module"`). Only `precisionFixed` is imported — API unchanged. Updated `jest.config.ts` to transform ESM packages: added `^.+\\.js$` transform and `transformIgnorePatterns` exception for `d3-format`. No source code changes required. Webpack build ✅, Jest 11/11 ✅, ESLint 0 errors ✅.
 
 ### PR 10: Cleanup
 ```
