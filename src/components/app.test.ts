@@ -308,7 +308,7 @@ describe("app", () => {
                 valueUnit: "N",
                 sensorPosition: 2
             })
-            expect(mockConsoleLog).toBeCalled();
+            expect(mockConsoleLog).toHaveBeenCalled();
         });
     })
 });
