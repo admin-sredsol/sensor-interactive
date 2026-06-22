@@ -99,7 +99,7 @@ These require significant code changes and careful testing.
 | `eslint-config-prettier` | `8.3.0` | `10.1.8` | Must match eslint v9+ | Upgrade with eslint |
 | `eslint-plugin-jsdoc` | `37.7.0` | `63.0.7` | Major API changes | Upgrade with eslint |
 | `@concord-consortium/lara-interactive-api` | `1.7.0` | `1.13.0` | API additions/changes | Check breaking changes in changelog |
-| `@concord-consortium/slate-editor` | `0.7.3` | `0.13.0` | Major rewrite, React 18+ required | Fixes all node_modules TS errors; biggest win |
+| `@concord-consortium/slate-editor` | `0.7.3` | `0.13.0` | ✅ Done in PR2 | Major rewrite, React 18+ required |
 
 **Recommended:** Each deserves its own PR:
 - **`typescript` v5→v6:** Run `tsc --noEmit` first to see new errors, fix, then upgrade
@@ -136,11 +136,13 @@ shutterbug, jquery (v3 latest), iframe-phone, style-loader (v3 latest)
 **Result:** Build passes, 11/11 Jest tests pass, Cypress smoke test passes.
 **Note:** `@vernier/godirect` v1.8 was skipped — it uses ESM which breaks Jest.
 
-### PR 2: Slate Editor Upgrade (Biggest Impact)
+### PR 2: Slate Editor Upgrade ✅ COMPLETED
+
 ```
 @concord-consortium/slate-editor: 0.7.3 → 0.13.0
 ```
-**Impact:** Eliminates all 20 `node_modules/` TypeScript errors. Requires React 18+ (already have React 19).
+**Impact:** Reduced TS errors from 20 to 10 (all remaining in `node_modules/`). Required React 18+ (already have React 19).
+**Breaking changes:** `SlateEditor` + `SlateToolbar` → `SlateContainer`, `getContentHeight` removed, CSS path changed, `order` → `buttons` prop.
 
 ### PR 3: LARA Interactive API
 ```
