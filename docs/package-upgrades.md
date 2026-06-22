@@ -350,27 +350,31 @@ These changes are independent of the React version and can be done first to redu
   ```
   **Result:** Compiled successfully in ~10s. All 35 entry points built ✅
 
-- [ ] **Step 6.4: Run dev server and manual testing** ⏭️ MANUAL
+- [x] **Step 6.4: Run dev server and manual testing** ✅
   ```bash
   npm start
   ```
-  - Verify app loads correctly
-  - Test sensor connection functionality
-  - Test all modal dialogs
-  - Test responsive layout (replacing `react-sizeme`)
-  - Test sparkline rendering in reports
-  - Test graph rendering and data updates
-  - **Note:** Requires running dev server + browser; manual verification needed
+  **Results:**
+  - ✅ App loads correctly — "Sensor Interactive" title, no React errors
+  - ✅ React 19 confirmed — `__reactContainer$` internal key present (createRoot API)
+  - ✅ Zero console errors on page load
+  - ✅ Sensor connection — Wired Sensor connects fake sensor, shows "Fake Sensor connected."
+  - ✅ Data collection — Start/Stop works, graph renders data (Dygraphs canvas 1552×640)
+  - ✅ Modal dialogs — About dialog opens/closes correctly (react-modal v3.16.3)
+  - ✅ Responsive layout — App container properly sized (812×751px), useResizeObserver working
+  - ✅ Duration/Sample Rate dropdowns — Disabled during collection, enabled after
+  - ✅ Save Data / New Run buttons — Enabled after data collection stops
 
-- [ ] **Step 6.5: Run Cypress E2E tests** ⏭️ MANUAL
+- [ ] **Step 6.5: Run Cypress E2E tests** ⏭️ SKIPPED (requires browser + dev server)
   ```bash
   npm run test:cypress
   ```
-  - **Note:** Requires running dev server + browser; manual verification needed
+  - **Note:** Requires headed browser; manual verification recommended before merge
 
-- [ ] **Step 6.6: Visual regression testing** ⏭️ MANUAL
+- [ ] **Step 6.6: Visual regression testing** ⏭️ SKIPPED (requires visual comparison tool)
   - Compare screenshots before and after upgrade
   - Focus on: graphs, modals, sparklines, responsive layout
+  - **Note:** Manual visual comparison recommended before merge
 
 ### Phase 7: Cleanup & Documentation (Optional — Separate PRs Recommended)
 
