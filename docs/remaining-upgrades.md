@@ -98,7 +98,7 @@ These require significant code changes and careful testing.
 | `@typescript-eslint/*` | `5.10.2` | `8.61.1` | Must match eslint v9+ | Upgrade with eslint |
 | `eslint-config-prettier` | `8.3.0` | `10.1.8` | Must match eslint v9+ | Upgrade with eslint |
 | `eslint-plugin-jsdoc` | `37.7.0` | `63.0.7` | Major API changes | Upgrade with eslint |
-| `@concord-consortium/lara-interactive-api` | `1.7.0` | `1.13.0` | API additions/changes | Check breaking changes in changelog |
+| `@concord-consortium/lara-interactive-api` | `1.7.0` | `1.13.0` | ✅ Done in PR3 | Backward compatible; no code changes needed |
 | `@concord-consortium/slate-editor` | `0.7.3` | `0.13.0` | ✅ Done in PR2 | Major rewrite, React 18+ required |
 
 **Recommended:** Each deserves its own PR:
@@ -144,11 +144,12 @@ shutterbug, jquery (v3 latest), iframe-phone, style-loader (v3 latest)
 **Impact:** Reduced TS errors from 20 to 10 (all remaining in `node_modules/`). Required React 18+ (already have React 19).
 **Breaking changes:** `SlateEditor` + `SlateToolbar` → `SlateContainer`, `getContentHeight` removed, CSS path changed, `order` → `buttons` prop.
 
-### PR 3: LARA Interactive API
+### PR 3: LARA Interactive API ✅ COMPLETED
+
 ```
 @concord-consortium/lara-interactive-api: 1.7.0 → 1.13.0
 ```
-**Impact:** Check for API changes in init message handling.
+**Impact:** No code changes required — all used APIs are backward compatible. New exports available (accessibility, jobs, pub/sub, media library, dirty state, custom messages).
 
 ### PR 4: Webpack Ecosystem
 ```
