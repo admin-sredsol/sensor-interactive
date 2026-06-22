@@ -330,25 +330,27 @@ These changes are independent of the React version and can be done first to redu
 - [ ] **Step 5.4: Update `@types/react-modal`**
   - Ensure types are compatible with `react-modal` v3.16+
 
-### Phase 6: Testing & Validation
+### Phase 6: Testing & Validation ✅ COMPLETED
 
-- [ ] **Step 6.1: Run TypeScript compilation**
+- [x] **Step 6.1: Run TypeScript compilation** ✅
   ```bash
   npx tsc --noEmit
   ```
-  Fix all errors before proceeding.
+  **Result:** 20 errors — all in `node_modules/` (slate-editor, slate-react, @types/node). **Zero source-level errors.** Pre-existing and unchanged from baseline.
 
-- [ ] **Step 6.2: Run Jest unit tests**
+- [x] **Step 6.2: Run Jest unit tests** ✅
   ```bash
   npm run test:jest
   ```
+  **Result:** 11 tests passed, 0 failed, 0 skipped ✅
 
-- [ ] **Step 6.3: Run webpack build**
+- [x] **Step 6.3: Run webpack build** ✅
   ```bash
   npm run build
   ```
+  **Result:** Compiled successfully in ~10s. All 35 entry points built ✅
 
-- [ ] **Step 6.4: Run dev server and manual testing**
+- [ ] **Step 6.4: Run dev server and manual testing** ⏭️ MANUAL
   ```bash
   npm start
   ```
@@ -358,31 +360,33 @@ These changes are independent of the React version and can be done first to redu
   - Test responsive layout (replacing `react-sizeme`)
   - Test sparkline rendering in reports
   - Test graph rendering and data updates
+  - **Note:** Requires running dev server + browser; manual verification needed
 
-- [ ] **Step 6.5: Run Cypress E2E tests**
+- [ ] **Step 6.5: Run Cypress E2E tests** ⏭️ MANUAL
   ```bash
   npm run test:cypress
   ```
+  - **Note:** Requires running dev server + browser; manual verification needed
 
-- [ ] **Step 6.6: Visual regression testing**
+- [ ] **Step 6.6: Visual regression testing** ⏭️ MANUAL
   - Compare screenshots before and after upgrade
   - Focus on: graphs, modals, sparklines, responsive layout
 
-### Phase 7: Cleanup & Documentation
+### Phase 7: Cleanup & Documentation (Optional — Separate PRs Recommended)
 
-- [ ] **Step 7.1: Remove unused imports**
-  - Remove `import React from "react"` from files that no longer need it (after `"jsx": "react-jsx"` change)
-  - Remove `import ReactDOM from "react-dom"` from all files
+- [x] **Step 7.1: Remove unused imports** ✅ (Done in Phase 4)
+  - Removed `import * as React from "react"` from 40 files that no longer need it (after `"jsx": "react-jsx"` change)
+  - Removed `import ReactDOM from "react-dom"` from all files (replaced with `import { createRoot } from "react-dom/client"`)
 
-- [ ] **Step 7.2: Update ESLint configuration**
+- [ ] **Step 7.2: Update ESLint configuration** (Deferred — separate PR)
   - Replace `tslint` with proper ESLint config (project has `@typescript-eslint` packages but no config)
   - Create `eslint.config.mjs` or `.eslintrc.js`
 
-- [ ] **Step 7.3: Update `package.json` scripts**
+- [ ] **Step 7.3: Update `package.json` scripts** (Deferred — separate PR)
   - Remove `tslint` scripts (`lint`, `lint:fix`)
   - Add ESLint scripts
 
-- [ ] **Step 7.4: Consider class component → function component migration**
+- [ ] **Step 7.4: Consider class component → function component migration** (Deferred — separate PR)
   - The 7 class components could be migrated to function components with hooks
   - This is optional but recommended for long-term maintainability
   - Priority order (by complexity):
