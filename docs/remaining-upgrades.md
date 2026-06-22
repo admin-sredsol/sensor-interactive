@@ -47,7 +47,7 @@ These are same-major-version updates that should be safe to upgrade in a single 
 | `eslint-config-prettier` | `8.3.0` | `8.10.2` | Minor | ✅ Done in PR1 |
 | `eslint-plugin-jsdoc` | `37.7.0` | `37.9.7` | Minor | ✅ Done in PR1 |
 | `css-loader` | `6.6.0` | `6.11.0` | Minor | ✅ Done in PR1 → upgraded to v7.1.4 in PR4 |
-| `cypress` | `13.12.0` | `13.17.0` | Minor | ✅ Done in PR1 |
+| `cypress` | `13.12.0` | `13.17.0` | Minor | ✅ Done in PR1 → upgraded to v15.17.0 in PR5 |
 | `@vernier/godirect` | `1.7.1` | `1.8.3` | Minor | ⚠️ Skipped — v1.8 uses ESM, breaks Jest |
 | `iframe-phone` | `1.3.1` | `1.4.0` | Minor | ✅ Done in PR1 |
 
@@ -64,17 +64,17 @@ These require API review and potentially code changes, but are well-scoped.
 | `d3-format` | `1.4.5` | `3.1.2` | ESM-only in v3; `@types/d3-format` needs v3+ | Check format strings |
 | `@types/d3-format` | `1.4.2` | `3.0.4` | Must match `d3-format` v3 | Upgrade with d3-format |
 | `@types/dygraphs` | `1.1.13` | `2.1.11` | Major type changes | Check compatibility with dygraphs v2 |
-| `@types/jest` | `27.4.0` | `30.0.0` | Must match jest major | Upgrade with jest |
-| `jest` | `27.5.1` | `30.4.2` | Major breaking changes in v28+ | Needs config migration |
-| `ts-jest` | `27.1.3` | `29.4.11` | Must match jest major | Upgrade with jest |
+| `@types/jest` | `27.4.0` | `30.0.0` | ✅ Done in PR5 | Must match jest major |
+| `jest` | `27.5.1` | `30.4.2` | ✅ Done in PR5 | Added jest-environment-jsdom; toBeCalled→toHaveBeenCalled |
+| `ts-jest` | `27.1.3` | `29.4.11` | ✅ Done in PR5 | Must match jest major |
 | `copy-webpack-plugin` | `10.2.4` | `14.0.0` | ✅ Done in PR4 | Backward compatible |
 | `webpack-cli` | `5.1.4` | `7.0.3` | ✅ Done in PR4 | Backward compatible |
 | `webpack-dev-server` | `4.7.4` | `5.2.5` | ✅ Done in PR4 | Backward compatible |
 | `postcss-loader` | `6.2.1` | `8.2.1` | ✅ Done in PR4 | Backward compatible |
 | `source-map-loader` | `0.2.4` | `5.0.0` | ✅ Done in PR4 | Backward compatible |
 | `style-loader` | `3.3.1` | `4.0.0` | ✅ Done in PR4 | Backward compatible |
-| `cypress-commands` | `2.0.1` | `3.0.0` | API changes | Check test files |
-| `@simonsmith/cypress-image-snapshot` | `9.0.3` | `10.0.4` | API changes | Check snapshot tests |
+| `cypress-commands` | `2.0.1` | `3.0.0` | ✅ Done in PR5 | Backward compatible |
+| `@simonsmith/cypress-image-snapshot` | `9.0.3` | `10.0.4` | ✅ Done in PR5 | Backward compatible |
 | `cross-env` | `7.0.3` | `10.1.0` | ESM-only in v10 | Check scripts |
 | `wait-on` | `4.0.2` | `9.0.10` | Major API changes | Check CI scripts |
 
@@ -160,13 +160,14 @@ source-map-loader: 0.2 → 5
 ```
 **Impact:** No config changes required — all packages backward compatible with existing webpack.config.js.
 
-### PR 5: Testing Infrastructure
+### PR 5: Testing Infrastructure ✅ COMPLETED
+
 ```
 jest: 27 → 30, ts-jest: 27 → 29, @types/jest: 27 → 30,
 cypress: 13 → 15, cypress-commands: 2 → 3,
 @simonsmith/cypress-image-snapshot: 9 → 10
 ```
-**Risk:** Medium. Config migration needed for jest v28+.
+**Impact:** Added `jest-environment-jsdom` (separated from Jest in v28+). Fixed `toBeCalled()` → `toHaveBeenCalled()` in app.test.ts. Cypress 15 shows deprecation warning about `Cypress.env()` (from plugin, not our code).
 
 ### PR 6: TypeScript v5/6
 ```
