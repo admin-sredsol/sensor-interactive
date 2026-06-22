@@ -19,6 +19,9 @@ import { FakeSensorManager } from "../models/fake-sensor-manager";
 import { SensorTagManager } from "../models/sensor-tag-manager";
 import { SensorGDXManager } from "../models/sensor-gdx-manager";
 import { HeartRateSensorManager } from "../models/sensor-polar-manager";
+import { BLESensorManager } from "../models/ble-sensor-manager";
+import { PhoneSensorManager } from "../models/phone-sensor-manager";
+import { PHONE_SENSOR_PRESETS } from "../models/phone-sensor-profiles";
 import { IAuthoredMinMax, IInteractiveState, SensorRecording } from "../interactive/types";
 import { SensorRecordingStore } from "../models/recording-store";
 import { PredictionState } from "./types";
@@ -78,7 +81,7 @@ export interface AppProps {
 }
 
 export interface AppState {
-    sensorManager: SensorManager | HeartRateSensorManager | null,
+    sensorManager: SensorManager | HeartRateSensorManager | BLESensorManager | PhoneSensorManager | null,
     sensorConfig: SensorConfiguration | null;
     sensorSlots: SensorSlot[];
     hasData: boolean;
@@ -100,6 +103,11 @@ export interface AppState {
     bluetoothErrorModal: boolean;
     disconnectionWarningModal: boolean;
     aboutModal: boolean;
+    esp32WebSocketModal: boolean;
+    esp32WebSocketUrl: string;
+    phoneSensorModal: boolean;
+    phonePreset: string;
+    phonePermissionDenied: boolean;
     sensorRecordings: SensorRecording[];
     pauseHeartbeat: boolean;
     promptHeight: number;
@@ -264,6 +272,11 @@ class AppContainer extends React.Component<AppProps, AppState> {
             secondGraph:false,
             bluetoothErrorModal:false,
             disconnectionWarningModal:false,
+            esp32WebSocketModal:false,
+            esp32WebSocketUrl:"ws://192.168.4.1:81",
+            phoneSensorModal:false,
+            phonePreset:"accelerometer",
+            phonePermissionDenied:false,
             aboutModal:false,
             sensorRecordings:[],
             pauseHeartbeat: false,
@@ -309,6 +322,14 @@ class AppContainer extends React.Component<AppProps, AppState> {
         this.reload = this.reload.bind(this);
         this.closeBluetoothErrorModal = this.closeBluetoothErrorModal.bind(this);
         this.closeDisconnectionWarningModal = this.closeDisconnectionWarningModal.bind(this);
+        this.closeEsp32WebSocketModal = this.closeEsp32WebSocketModal.bind(this);
+        this.openEsp32WebSocketModal = this.openEsp32WebSocketModal.bind(this);
+        this.connectEsp32ViaWebSocket = this.connectEsp32ViaWebSocket.bind(this);
+        this.handleEsp32WebSocketUrlChange = this.handleEsp32WebSocketUrlChange.bind(this);
+        this.closePhoneSensorModal = this.closePhoneSensorModal.bind(this);
+        this.openPhoneSensorModal = this.openPhoneSensorModal.bind(this);
+        this.connectPhoneSensors = this.connectPhoneSensors.bind(this);
+        this.handlePresetChange = this.handlePresetChange.bind(this);
         this.closeAboutModal = this.closeAboutModal.bind(this);
         this.showAbout= this.showAbout.bind(this);
         this.saveInteractiveState = this.saveInteractiveState.bind(this);
@@ -645,7 +666,7 @@ class AppContainer extends React.Component<AppProps, AppState> {
         try {
             let optionalServices: any[] = [];
             let wirelessFilters: any[] = [];
-            [SensorTagManager, SensorGDXManager, HeartRateSensorManager].forEach(mgrClass => {
+            [SensorTagManager, SensorGDXManager, HeartRateSensorManager, BLESensorManager].forEach(mgrClass => {
               optionalServices.push(...mgrClass.getOptionalServices());
               wirelessFilters.push(...mgrClass.getWirelessFilters());
             });
@@ -666,11 +687,14 @@ class AppContainer extends React.Component<AppProps, AppState> {
 
             const isPolar = wirelessDevice.name.includes("Polar");
             const isGDX = wirelessDevice.name.includes("GDX");
+            const isESP32 = wirelessDevice.name.includes("ESP32");
             let sensorManager;
             if (isPolar) {
                 sensorManager = new HeartRateSensorManager();
             } else if (isGDX) {
                 sensorManager = new SensorGDXManager();
+            } else if (isESP32) {
+                sensorManager = new BLESensorManager();
             } else {
                 sensorManager = new SensorTagManager();
             }
@@ -1102,6 +1126,80 @@ class AppContainer extends React.Component<AppProps, AppState> {
         this.setState({ disconnectionWarningModal: false });
     }
 
+    closeEsp32WebSocketModal() {
+        this.setState({ esp32WebSocketModal: false });
+    }
+
+    openEsp32WebSocketModal() {
+        this.setState({ esp32WebSocketModal: true });
+    }
+
+    handleEsp32WebSocketUrlChange(e: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({ esp32WebSocketUrl: e.target.value });
+    }
+
+    async connectEsp32ViaWebSocket() {
+        this.setState({ esp32WebSocketModal: false, statusMessage: this.messages["connecting"] });
+
+        const manager = new BLESensorManager({ mode: "websocket", wsUrl: this.state.esp32WebSocketUrl });
+        this.removeSensorManagerListeners();
+
+        this.setState({ sensorManager: manager }, () => {
+            manager.connectViaWebSocket(this.state.esp32WebSocketUrl).then(connected => {
+                if (connected) {
+                    this.addSensorManagerListeners();
+                    if (this.state.sensorManager) {
+                        this.state.sensorManager.startPolling();
+                    }
+                } else {
+                    console.log("Failed to connect to ESP32 via WebSocket");
+                    this.setState({ bluetoothErrorModal: true });
+                }
+            });
+        });
+    }
+
+    closePhoneSensorModal() {
+        this.setState({ phoneSensorModal: false });
+    }
+
+    openPhoneSensorModal() {
+        this.setState({ phoneSensorModal: true, phonePermissionDenied: false });
+    }
+
+    handlePresetChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        const newPreset = e.target.value;
+        this.setState({ phonePreset: newPreset });
+        // If already connected, update the manager's preset
+        const { sensorManager } = this.state;
+        if (sensorManager instanceof PhoneSensorManager) {
+            sensorManager.setPreset(newPreset);
+            // Re-send config to update UI
+            sensorManager.startPolling();
+        }
+    }
+
+    async connectPhoneSensors() {
+        const preset = this.state.phonePreset;
+        const manager = new PhoneSensorManager({ preset });
+
+        // Request permissions (must be called from user gesture on iOS)
+        const granted = await manager.requestSensorPermissions();
+
+        if (!granted) {
+            this.setState({ phonePermissionDenied: true });
+            return;
+        }
+
+        this.removeSensorManagerListeners();
+        this.setState({ phoneSensorModal: false, phonePermissionDenied: false }, () => {
+            this.setState({ sensorManager: manager }, () => {
+                this.addSensorManagerListeners();
+                manager.startPolling();
+            });
+        });
+    }
+
     closeAboutModal() {
         this.setState({ aboutModal: false })
     }
@@ -1283,6 +1381,7 @@ class AppContainer extends React.Component<AppProps, AppState> {
                 { displaySensorControls &&
                     <div className="sensor-buttons">
                         {this.renderConnectionButtons()}
+                        {this.renderPhonePresetSelector()}
                     </div>
                 }
 
@@ -1310,6 +1409,16 @@ class AppContainer extends React.Component<AppProps, AppState> {
                                 disabled={wirelessConnected || this.state.collecting}>
                             Wired Sensor
                         </button>
+                        <button className="connect-to-device-button smart-focus-highlight disable-focus-highlight"
+                                onClick={this.openEsp32WebSocketModal}
+                                disabled={wirelessConnected || wiredConnected || this.state.collecting}>
+                            ESP32 WiFi
+                        </button>
+                        <button className="connect-to-device-button smart-focus-highlight disable-focus-highlight"
+                                onClick={this.openPhoneSensorModal}
+                                disabled={wirelessConnected || wiredConnected || this.state.collecting}>
+                            Phone Sensors
+                        </button>
                     </div>
                     : null }
                 </div>
@@ -1331,6 +1440,28 @@ class AppContainer extends React.Component<AppProps, AppState> {
             }
         }
     }
+
+    renderPhonePresetSelector() {
+        const { sensorManager, collecting } = this.state;
+        if (!(sensorManager instanceof PhoneSensorManager) || collecting) {
+            return null;
+        }
+        return (
+            <div className="phone-preset-selector" style={{ marginTop: "8px" }}>
+                <label style={{ marginRight: "8px" }}>Sensor Mode:</label>
+                <select
+                    value={this.state.phonePreset}
+                    onChange={this.handlePresetChange}
+                    style={{ padding: "2px 6px" }}
+                >
+                    {Object.values(PHONE_SENSOR_PRESETS).map(preset => (
+                        <option key={preset.id} value={preset.id}>{preset.name}</option>
+                    ))}
+                </select>
+            </div>
+        );
+    }
+
     preferredUnits() {
         const { preRecordings } = this.props;
         let units = preRecordings && preRecordings[0] && preRecordings[0].unit;
@@ -1634,6 +1765,54 @@ class AppContainer extends React.Component<AppProps, AppState> {
                     <p>{this.messages["about_message"]}</p>
                     <div className="sensor-dialog-buttons">
                         <button onClick={this.closeAboutModal}>Ok</button>
+                    </div>
+                </ReactModal>
+                <ReactModal className="sensor-dialog-content"
+                            overlayClassName="sensor-dialog-overlay"
+                            contentLabel="Connect ESP32 via WiFi"
+                            isOpen={this.state.esp32WebSocketModal} >
+                    <div className="sensor-dialog-header">Connect ESP32 via WiFi</div>
+                    <p>Enter the WebSocket URL of your ESP32 device:</p>
+                    <input type="text"
+                           value={this.state.esp32WebSocketUrl}
+                           onChange={this.handleEsp32WebSocketUrlChange}
+                           style={{ width: "100%", padding: "4px 8px", marginBottom: "8px" }}
+                    />
+                    <div className="sensor-dialog-buttons">
+                        <button onClick={this.closeEsp32WebSocketModal}>Cancel</button>
+                        <button onClick={this.connectEsp32ViaWebSocket}>Connect</button>
+                    </div>
+                </ReactModal>
+                <ReactModal className="sensor-dialog-content"
+                            overlayClassName="sensor-dialog-overlay"
+                            contentLabel="Phone Sensors"
+                            isOpen={this.state.phoneSensorModal} >
+                    <div className="sensor-dialog-header">Phone Sensors</div>
+                    <p>Use your phone or tablet&apos;s built-in sensors (accelerometer, gyroscope, compass, GPS).</p>
+                    {!PhoneSensorManager.isMobile() && (
+                        <p style={{ color: "#b71c1c", fontWeight: "bold" }}>
+                            ⚠ Desktop detected: Motion sensors may not work on this device.
+                            Use a mobile device for best results.
+                        </p>
+                    )}
+                    {this.state.phonePermissionDenied && (
+                        <p style={{ color: "#b71c1c" }}>
+                            Permission denied. Please allow sensor access in your browser settings.
+                        </p>
+                    )}
+                    <div style={{ marginBottom: "12px" }}>
+                        <label style={{ display: "block", marginBottom: "4px" }}>Sensor Mode:</label>
+                        <select value={this.state.phonePreset}
+                                onChange={this.handlePresetChange}
+                                style={{ width: "100%", padding: "4px 8px" }}>
+                            {Object.values(PHONE_SENSOR_PRESETS).map(preset => (
+                                <option key={preset.id} value={preset.id}>{preset.name} — {preset.description}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="sensor-dialog-buttons">
+                        <button onClick={this.closePhoneSensorModal}>Cancel</button>
+                        <button onClick={this.connectPhoneSensors}>Connect</button>
                     </div>
                 </ReactModal>
                 { this.props.prompt &&
