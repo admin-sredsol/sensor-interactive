@@ -1,5 +1,4 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import App from "../components/app";
 import { SensorRecording } from "../interactive/types";
 
@@ -24,11 +23,13 @@ const preRecordedData:SensorRecording[] = [
   recording
 ];
 
-ReactDOM.render(
+const rootElt = document.getElementById("app");
+if (rootElt) {
+  createRoot(rootElt).render(
     <App
       preRecordings={preRecordedData}
       fakeSensor={true}
       displayType={"line"}
-    />,
-    document.getElementById("app")
-);
+    />
+  );
+}

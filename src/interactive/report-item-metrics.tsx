@@ -1,4 +1,3 @@
-import * as React from "react";
 import * as Renderer from "react-dom/server";
 
 import { IAuthoredState, IInteractiveState, SensorRecording } from "./types";

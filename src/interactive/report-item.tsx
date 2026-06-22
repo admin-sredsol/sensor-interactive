@@ -1,6 +1,5 @@
-import * as React from "react";
 import { useEffect } from "react";
-import * as ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import * as semver from "semver";
 import { addGetReportItemAnswerListener, getClient, IReportItemInitInteractive, IReportItemAnswerItem,
          sendReportItemAnswer, useAutoSetHeight, useInitMessage } from "@concord-consortium/lara-interactive-api";
@@ -75,4 +74,7 @@ export const ReportItemComponent = () => {
   );
 };
 
-ReactDOM.render(<ReportItemComponent />, document.getElementById("app"));
+const rootElt = document.getElementById("app");
+if (rootElt) {
+  createRoot(rootElt).render(<ReportItemComponent />);
+}

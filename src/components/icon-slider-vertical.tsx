@@ -1,5 +1,3 @@
-import React from "react"
-
 import "./icon-slide-vertical.css";
 
 export const SliderIcon = () => {

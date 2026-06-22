@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getContentHeight, htmlToSlate, SlateEditor, slateToHtml, SlateToolbar } from "@concord-consortium/slate-editor";
 
 import "@concord-consortium/slate-editor/build/index.css";
@@ -24,7 +24,7 @@ export const RichTextWidget = (props: IRichTextProps) => {
   const { id, onBlur } = props;
   const [value, setValue] = useState(htmlToSlate(props.value || ""));
   const [changeCount, setChangeCount] = useState(0);
-  const editorRef = useRef<any>();
+  const editorRef = useRef<any>(undefined);
   const kExtraHeight = 30;
   const kInitialHeight = 50;
   const [height, setHeight] = useState(kInitialHeight);

@@ -1,5 +1,4 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import * as ReactModal from "react-modal";
 import App from "./components/app";
 
@@ -11,8 +10,9 @@ ReactModal.setAppElement(appElt);
 const params = new URLSearchParams(window.location.search);
 const fakeSensor = params.get("fakeSensor") === "true";
 
-ReactDOM.render(
-  // By default we will be using sensors.
-  <App useSensors={true} displayType={"line"} fakeSensor={fakeSensor}/>,
-  appElt
-);
+if (appElt) {
+  createRoot(appElt).render(
+    // By default we will be using sensors.
+    <App useSensors={true} displayType={"line"} fakeSensor={fakeSensor}/>
+  );
+}

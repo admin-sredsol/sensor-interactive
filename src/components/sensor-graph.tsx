@@ -160,25 +160,25 @@ export default class SensorGraph extends React.Component<SensorGraphProps, Senso
       this.setState({isRescaled: true});
     }
 
-    componentWillReceiveProps(nextProps:SensorGraphProps) {
+    componentDidUpdate(prevProps:SensorGraphProps) {
       const { dataReset, xStart, xEnd, sensorRecording, overrideAxes } = this.props;
 
       const stateChanges = {} as SensorGraphState;
 
-      if (!dataReset && nextProps.dataReset) {
+      if (!prevProps.dataReset && dataReset) {
           this.lastDataIndex = 0;
           stateChanges.isRescaled = false;
       }
 
       // update Y axis to default range if sensor unit changes and overrideAxes is false
-      if (!overrideAxes && sensorRecording?.unit !== nextProps.sensorRecording?.unit) {
-          stateChanges.yMin = nextProps.sensorRecording?.min ?? 0;
-          stateChanges.yMax = nextProps.sensorRecording?.max ?? 100;
+      if (!overrideAxes && prevProps.sensorRecording?.unit !== sensorRecording?.unit) {
+          stateChanges.yMin = sensorRecording?.min ?? 0;
+          stateChanges.yMax = sensorRecording?.max ?? 100;
       }
 
-      if (nextProps.xEnd !== xEnd || nextProps.xStart !== xStart) {
-          stateChanges.xMin = nextProps.xStart;
-          stateChanges.xMax = nextProps.xEnd;
+      if (xEnd !== prevProps.xEnd || xStart !== prevProps.xStart) {
+          stateChanges.xMin = xStart;
+          stateChanges.xMax = xEnd;
       }
 
       if (Object.keys(stateChanges).length > 0) {

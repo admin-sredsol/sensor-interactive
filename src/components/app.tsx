@@ -219,8 +219,8 @@ class AppContainer extends React.Component<AppProps, AppState> {
     private isReloading:boolean = false;
     private columnInfoCache: { [columnID: string]: SensorConfigColumnInfo[]; } = {};
     private interactiveHost: InteractiveHost;
-    private promptRef: React.RefObject<HTMLInputElement>;
-    private topBarRef: React.RefObject<HTMLInputElement>;
+    private promptRef: React.RefObject<HTMLInputElement | null>;
+    private topBarRef: React.RefObject<HTMLInputElement | null>;
 
     constructor(props: AppProps) {
         super(props);

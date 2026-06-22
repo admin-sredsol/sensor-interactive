@@ -340,23 +340,24 @@ export class Graph extends React.Component<GraphProps, GraphState> {
         this.makeDygraph();
     }
 
-    componentWillReceiveProps(nextProps:GraphProps) {
-        var data = nextProps.data || [];
-        var newState:any = {};
+    componentDidUpdate(prevProps:GraphProps, prevState:GraphState) {
+        const data = this.props.data || [];
+        const newState:any = {};
 
         this.dyUpdateProps.forEach((prop)=> {
-            if(nextProps[prop] !== this.props[prop]) {
-                newState[prop] = nextProps[prop];
+            if((this.props as any)[prop] !== (prevProps as any)[prop]) {
+                newState[prop] = (this.props as any)[prop];
             }
         });
 
         newState.data = data;
         newState.dataLength = data.length;
 
-        newState.yAxisFix = Format.getAxisFix('y', nextProps.yMax - nextProps.yMin, nextProps.height);
-        newState.xAxisFix = Format.getAxisFix('x', nextProps.xMax - nextProps.xMin, nextProps.width);
+        newState.yAxisFix = Format.getAxisFix('y', this.props.yMax - this.props.yMin, this.props.height);
+        newState.xAxisFix = Format.getAxisFix('x', this.props.xMax - this.props.xMin, this.props.width);
 
         this.setState(newState);
+        this.update();
     }
 
     shouldComponentUpdate(nextProps:GraphProps, nextState:GraphState):boolean {
@@ -378,10 +379,6 @@ export class Graph extends React.Component<GraphProps, GraphState> {
             return true;
         }
         return false;
-    }
-
-    componentDidUpdate(prevProps:GraphProps, prevState:GraphState) {
-        this.update();
     }
 
     render() {

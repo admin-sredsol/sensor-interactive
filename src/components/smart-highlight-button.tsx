@@ -31,7 +31,7 @@ export default class SmartHighlightButton extends React.Component<
                       SmartFocusHighlight.kSmartFocusHighlightClass;
     return (
       <button className={classes} {...others}
-              ref={(elt) => this.elementRef = elt}
+              ref={(elt) => { this.elementRef = elt; }}
               onMouseEnter={this.suppressFocusHighlight}
               onMouseDown={this.suppressFocusHighlight}>
         {this.props.children}
