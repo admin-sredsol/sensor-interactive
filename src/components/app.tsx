@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactModal from "react-modal";
-import { withSize }  from "react-sizeme";
+import { useResizeObserver } from "../hooks/use-resize-observer";
 import { Sensor } from "../models/sensor";
 import { SensorSlot } from "../models/sensor-slot";
 import { SensorConfiguration, gNullSensorConfig } from "../models/sensor-configuration";
@@ -1717,11 +1717,17 @@ class AppContainer extends React.Component<AppProps, AppState> {
     }
 }
 
-const sizeMeConfig = {
-  monitorWidth: true,
-  monitorHeight: true,
-  noPlaceholder: true
+// Wrapper component that provides size via useResizeObserver hook
+// This replaces the react-sizeme withSize HOC
+const AppWithSize: React.FC<Omit<AppProps, "size">> = (props) => {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const size = useResizeObserver(containerRef);
+  return (
+    <div ref={containerRef} style={{ width: "100%", height: "100%" }}>
+      {size.width > 0 && <AppContainer {...props} size={size} />}
+    </div>
+  );
 };
 
-const App: React.ComponentClass<Omit<AppProps, "size">> = withSize(sizeMeConfig)(AppContainer);
-export default App;
+export default AppWithSize;
+export { AppContainer };

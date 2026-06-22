@@ -34,14 +34,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/concord-consortium/sensor-interactive.git"
+    "url": "git+https://github.com/admin-sredsol/sensor-interactive.git"
   },
-  "author": "Concord Consortium",
+  "author": "Admin Sredsol",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/concord-consortium/sensor-interactive/issues"
+    "url": "https://github.com/admin-sredsol/sensor-interactive/issues"
   },
-  "homepage": "https://github.com/concord-consortium/sensor-interactive#readme",
+  "homepage": "https://github.com/admin-sredsol/sensor-interactive#readme",
   "dependencies": {
     "@concord-consortium/lara-interactive-api": "^1.7.0",
     "@concord-consortium/sensor-connector-interface": "^0.2.0",
@@ -53,9 +53,7 @@
     "lodash": "^4.17.21",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "react-modal": "^3.14.4",
-    "react-sizeme": "^3.0.2",
-    "react-sparklines": "^1.7.0",
+    "react-modal": "^3.16.3",
     "semver": "^7.3.5",
     "shutterbug": "^1.3.3-pre",
     "text-encoding": "^0.7.0"
@@ -70,7 +68,6 @@
     "@types/react": "^16.14.22",
     "@types/react-dom": "^16.9.14",
     "@types/react-modal": "^3.13.1",
-    "@types/react-sparklines": "^1.7.2",
     "@types/semver": "^7.3.9",
     "@types/web-bluetooth": "0.0.12",
     "@typescript-eslint/eslint-plugin": "^5.10.2",

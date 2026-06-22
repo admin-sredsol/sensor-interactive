@@ -2,7 +2,7 @@ import * as React from "react";
 import * as Renderer from "react-dom/server";
 
 import { IAuthoredState, IInteractiveState, SensorRecording } from "./types";
-import { Sparklines, SparklinesLine, SparklinesBars } from "react-sparklines";
+import { Sparklines, SparklinesLine, SparklinesBars } from "../components/sparkline";
 import SparklinesPoints from "./report-item-sparkline-points";
 
 export const ReportItemMetricsLegendComponent = ({view}: {view: "singleAnswer" | "multipleAnswer" | "hidden"}) => {

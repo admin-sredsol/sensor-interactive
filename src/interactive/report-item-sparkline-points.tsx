@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Point } from "react-sparklines";
+import { Point, SparklinesContext } from "../components/sparkline";
 
 // adapted from https://github.com/borisyankov/react-sparklines/blob/master/src/SparklinesLine.js
 
@@ -14,7 +14,11 @@ interface Props {
 
 const SparklinesPoints = (props: Props) => {
 
-  const { data, points, color, style, onMouseMove } = props;
+  const { color, style, onMouseMove } = props;
+  const context = React.useContext(SparklinesContext);
+  // Use points from props if provided, otherwise from Sparklines context
+  const points = props.points ?? context.points;
+  const data = props.data ?? context.data;
 
   const fillStyle: React.SVGAttributes<React.ReactSVGElement>['style'] = {
     stroke: style?.stroke || 'none',
