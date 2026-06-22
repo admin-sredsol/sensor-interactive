@@ -365,13 +365,14 @@ These changes are independent of the React version and can be done first to redu
   - ✅ Duration/Sample Rate dropdowns — Disabled during collection, enabled after
   - ✅ Save Data / New Run buttons — Enabled after data collection stops
 
-- [ ] **Step 6.5: Run Cypress E2E tests** ⏭️ SKIPPED (requires browser + dev server)
+- [x] **Step 6.5: Run Cypress E2E tests** ✅ (smoke test)
   ```bash
-  npm run test:cypress
+  npx cypress run --browser electron --spec 'cypress/e2e/smoke/*' --config video=false,defaultCommandTimeout=10000 --env testEnv=local
   ```
-  - **Note:** Requires headed browser; manual verification recommended before merge
+  **Result:** 1/1 smoke test passed ✅
+  - Full bar/line E2E suite requires Chrome browser (not available on this machine)
 
-- [ ] **Step 6.6: Visual regression testing** ⏭️ SKIPPED (requires visual comparison tool)
+- [ ] **Step 6.6: Visual regression testing** ⏭️ RECOMMENDED (before merge)
   - Compare screenshots before and after upgrade
   - Focus on: graphs, modals, sparklines, responsive layout
   - **Note:** Manual visual comparison recommended before merge
