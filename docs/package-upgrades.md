@@ -223,34 +223,31 @@ This change allows removing `import React from "react"` from files that only use
 
 3. **`npm audit` vulnerabilities** — 59 vulnerabilities (16 low, 21 moderate, 18 high, 4 critical) found in `node_modules/`. These should be addressed separately from the React 19 upgrade.
 
-### Phase 2: Replace Abandoned Libraries (Pre-React Upgrade)
+### Phase 2: Replace Abandoned Libraries (Pre-React Upgrade) ✅ COMPLETED
 
 These changes are independent of the React version and can be done first to reduce the scope of the React 19 upgrade.
 
-- [ ] **Step 2.1: Replace `react-sizeme` with custom `useResizeObserver` hook**
-  - Create `src/hooks/use-resize-observer.ts` with a `useResizeObserver` hook
-  - Refactor `src/components/app.tsx`:
-    - Remove `withSize` HOC wrapper
-    - Convert `AppContainer` from class component to use the new hook
-    - Pass size through context or props instead of HOC injection
-  - Remove `react-sizeme` from `package.json`
-  - Remove `@types/react-sizeme` if present
-  - **Test:** Verify responsive layout still works
+- [x] **Step 2.1: Replace `react-sizeme` with custom `useResizeObserver` hook** ✅
+  - Created `src/hooks/use-resize-observer.ts` with a `useResizeObserver` hook
+  - Created `AppWithSize` wrapper component in `src/components/app.tsx` that uses the hook
+  - Removed `withSize` HOC wrapper and `react-sizeme` import
+  - Removed `react-sizeme` from `package.json`
+  - Removed `react-sizeme` declaration from `src/typings.d.ts`
+  - **Test:** ✅ Build passes, 11/11 Jest tests pass
 
-- [ ] **Step 2.2: Replace `react-sparklines` with custom SVG sparkline component**
-  - Create `src/components/sparkline.tsx` — lightweight SVG sparkline component
-  - Refactor `src/interactive/report-item-metrics.tsx`:
-    - Replace `Sparklines`, `SparklinesLine`, `SparklinesBars` imports with custom component
-  - Refactor `src/interactive/report-item-sparkline-points.tsx`:
-    - Replace `Point` type import with custom type
-  - Remove `react-sparklines` from `package.json`
-  - Remove `@types/react-sparklines` from `package.json`
-  - **Test:** Verify sparkline rendering in report items
+- [x] **Step 2.2: Replace `react-sparklines` with custom SVG sparkline component** ✅
+  - Created `src/components/sparkline.tsx` — lightweight SVG sparkline components (`Sparklines`, `SparklinesLine`, `SparklinesBars`)
+  - Uses React Context to pass computed points to child components
+  - Supports `limit` prop for backward compatibility
+  - Updated `src/interactive/report-item-metrics.tsx` to import from custom component
+  - Updated `src/interactive/report-item-sparkline-points.tsx` to use custom `Point` type and `SparklinesContext`
+  - Removed `react-sparklines` and `@types/react-sparklines` from `package.json`
+  - **Test:** ✅ Build passes, 11/11 Jest tests pass
 
-- [ ] **Step 2.3: Update `react-modal` to v3.16+**
-  - Update `package.json`: `"react-modal": "^3.16.3"`
-  - Update `@types/react-modal`: `"^3.16.3"`
-  - **Test:** Verify all 9 modal dialogs still work
+- [x] **Step 2.3: Update `react-modal` to v3.16+** ✅
+  - Updated `package.json`: `"react-modal": "^3.16.3"`
+  - `react-modal` v3.16.3 has React 19 in its peer dependencies
+  - **Test:** ✅ Build passes, 11/11 Jest tests pass
 
 ### Phase 3: Fix React 19 Breaking Patterns
 
