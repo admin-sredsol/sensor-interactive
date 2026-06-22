@@ -67,7 +67,14 @@ module.exports = {
     },
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+        extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
+        // text-encoding polyfill is no longer needed in modern browsers.
+        // @vernier/godirect conditionally requires it, but the code path
+        // that uses it is only reached when TextDecoder is unavailable,
+        // which never happens in our target browsers.
+        fallback: {
+            "text-encoding": false,
+        }
     },
 
     module: {

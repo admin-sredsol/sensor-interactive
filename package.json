@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
-    "lint:fix": "tslint -c tslint.json --fix 'src/**/*.{ts,tsx}'",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
     "webpack": "cross-env NODE_ENV=production webpack --mode production",
     "webpack:watch": "cross-env NODE_ENV=production webpack -w --mode production",
     "dev-webpack": "cross-env NODE_ENV=development webpack --mode development",
@@ -57,7 +57,6 @@
     "react-modal": "^3.16.3",
     "semver": "^7.8.5",
     "shutterbug": "^1.5.0",
-    "text-encoding": "^0.7.0",
     "typescript-eslint": "^8.61.1"
   },
   "devDependencies": {
