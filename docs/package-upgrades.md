@@ -198,12 +198,30 @@ This change allows removing `import React from "react"` from files that only use
 
 ## Upgrade Plan — Step by Step
 
-### Phase 1: Preparation & Branch Setup
+### Phase 1: Preparation & Branch Setup ✅ COMPLETED
 
-- [ ] **Step 1.1:** Create a feature branch `upgrade/react-19`
-- [ ] **Step 1.2:** Ensure all existing tests pass (`npm run test:jest`)
-- [ ] **Step 1.3:** Run Cypress smoke tests to establish baseline (`npm run test:cypress:smoke`)
-- [ ] **Step 1.4:** Commit current working state as baseline
+- [x] **Step 1.1:** Create a feature branch `upgrade/react-19` ✅
+- [x] **Step 1.2:** Ensure all existing tests pass (`npm run test:jest`) ✅
+- [x] **Step 1.3:** Run Cypress smoke tests to establish baseline (`npm run test:cypress:smoke`) ✅
+- [x] **Step 1.4:** Commit current working state as baseline ✅
+
+#### Phase 1 Baseline Test Results
+
+| Test | Result | Details |
+|------|--------|---------|
+| **Jest unit tests** | ✅ PASS | 11 tests passed, 0 failed, 0 skipped |
+| **TypeScript compilation** | ⚠️ 71 errors (all in `node_modules/`) | All errors are in `@concord-consortium/slate-editor`, `slate-react`, `slate-dom`, and `@types/node` — **zero source-level errors** |
+| **Webpack production build** | ✅ PASS | Compiled successfully in 9s; all 35 entry points built |
+| **Cypress verification** | ✅ PASS | Cypress v13.12.0 verified; 34 E2E test files found (1 smoke, 13 bar, 13 line, 7 branch) |
+| **Cypress smoke tests** | ⏭️ SKIPPED | Requires running dev server + browser; manual verification needed |
+
+#### Pre-existing Issues Found
+
+1. **`@concord-consortium/slate-editor` type errors** — The `slate-editor` v0.7.3 has broken type definitions that depend on `slate-react` types with incompatible `Editor`/`Plugin` exports and missing `slate` type declarations. These are all in `node_modules/` and don't affect the build (webpack ignores `.d.ts` files). This will be resolved when upgrading `slate-editor` to v0.13.0 in Phase 4.
+
+2. **`@types/node` conflict** — `AbortSignal` type mismatch between `@types/node` and the project's `tsconfig.json`. This is a pre-existing issue that doesn't affect runtime.
+
+3. **`npm audit` vulnerabilities** — 59 vulnerabilities (16 low, 21 moderate, 18 high, 4 critical) found in `node_modules/`. These should be addressed separately from the React 19 upgrade.
 
 ### Phase 2: Replace Abandoned Libraries (Pre-React Upgrade)
 
