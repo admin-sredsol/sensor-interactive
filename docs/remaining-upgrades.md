@@ -185,11 +185,12 @@ eslint-plugin-jsdoc: 37 → 63
 ```
 **Impact:** Migrated from `.eslintrc.js` to `eslint.config.mjs` (flat config). Added `typescript-eslint` package. Removed deprecated `jsdoc/newline-after-description` rule. All rule severities preserved from original config.
 
-### PR 8: jQuery v4
+### PR 8: jQuery v4 ✅ COMPLETED
+
 ```
-jquery: 3 → 4
+jquery: 3.7.1 → 4.0.0
 ```
-**Risk:** High. Audit all jQuery usage first.
+**Impact:** No code changes required. jQuery is only used as a dependency of `shutterbug` (v1.5.0), which uses `$.Deferred`, `$.ajax`, `$.when`, and `$(selector)` — all preserved in jQuery v4. No direct jQuery usage exists in sensor-interactive source code. Webpack build ✅, Jest 11/11 ✅, ESLint 0 errors ✅.
 
 ### PR 9: D3 Format v3
 ```
