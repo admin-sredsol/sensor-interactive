@@ -93,7 +93,7 @@ These require significant code changes and careful testing.
 | Package | Current | Latest | Breaking Changes | Notes |
 |---------|---------|--------|-------------------|-------|
 | `jquery` | `3.6.0` | `4.0.0` | Removed deprecated APIs, ESM-first | Used in `shutterbug` integration; audit all jQuery usage |
-| `typescript` | `4.9.5` | `6.0.3` | Stricter type checking, new errors likely | Will surface new type errors; fix first |
+| `typescript` | `4.9.5` | `5.9.3` | ✅ Done in PR6 (v5); v6 deferred | Stricter type checking; v6 needs config changes |
 | `eslint` | `8.8.0` | `10.5.0` | Flat config required in v9+ | Need new `eslint.config.mjs` |
 | `@typescript-eslint/*` | `5.10.2` | `8.61.1` | Must match eslint v9+ | Upgrade with eslint |
 | `eslint-config-prettier` | `8.3.0` | `10.1.8` | Must match eslint v9+ | Upgrade with eslint |
@@ -169,11 +169,13 @@ cypress: 13 → 15, cypress-commands: 2 → 3,
 ```
 **Impact:** Added `jest-environment-jsdom` (separated from Jest in v28+). Fixed `toBeCalled()` → `toHaveBeenCalled()` in app.test.ts. Cypress 15 shows deprecation warning about `Cypress.env()` (from plugin, not our code).
 
-### PR 6: TypeScript v5/6
+### PR 6: TypeScript v5 ✅ COMPLETED
+
 ```
-typescript: 4.9 → 6.0
+typescript: 4.9.5 → 5.9.3
 ```
-**Risk:** Medium. Will surface new type errors that need fixing first.
+**Impact:** No code changes required. Zero source errors with TS 5.9.
+**Note:** TypeScript 6.0 was attempted but requires config changes (`rootDir`, `moduleResolution`, `lib`). Deferred to a separate PR.
 
 ### PR 7: ESLint v9 + Flat Config
 ```
