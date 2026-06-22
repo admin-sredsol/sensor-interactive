@@ -46,7 +46,7 @@ These are same-major-version updates that should be safe to upgrade in a single 
 | `eslint` | `8.8.0` | `8.57.1` | Minor | ✅ Done in PR1 |
 | `eslint-config-prettier` | `8.3.0` | `8.10.2` | Minor | ✅ Done in PR1 |
 | `eslint-plugin-jsdoc` | `37.7.0` | `37.9.7` | Minor | ✅ Done in PR1 |
-| `css-loader` | `6.6.0` | `6.11.0` | Minor | ✅ Done in PR1 |
+| `css-loader` | `6.6.0` | `6.11.0` | Minor | ✅ Done in PR1 → upgraded to v7.1.4 in PR4 |
 | `cypress` | `13.12.0` | `13.17.0` | Minor | ✅ Done in PR1 |
 | `@vernier/godirect` | `1.7.1` | `1.8.3` | Minor | ⚠️ Skipped — v1.8 uses ESM, breaks Jest |
 | `iframe-phone` | `1.3.1` | `1.4.0` | Minor | ✅ Done in PR1 |
@@ -67,12 +67,12 @@ These require API review and potentially code changes, but are well-scoped.
 | `@types/jest` | `27.4.0` | `30.0.0` | Must match jest major | Upgrade with jest |
 | `jest` | `27.5.1` | `30.4.2` | Major breaking changes in v28+ | Needs config migration |
 | `ts-jest` | `27.1.3` | `29.4.11` | Must match jest major | Upgrade with jest |
-| `copy-webpack-plugin` | `10.2.4` | `14.0.0` | API changes in v11+ | Check webpack config |
-| `webpack-cli` | `5.1.4` | `7.0.3` | Breaking config changes | Check webpack config |
-| `webpack-dev-server` | `4.7.4` | `5.2.5` | Breaking config changes | Check dev server config |
-| `postcss-loader` | `6.2.1` | `8.2.1` | Requires postcss v8+ (already have) | Check loader config |
-| `source-map-loader` | `0.2.4` | `5.0.0` | Complete rewrite | Check webpack config |
-| `style-loader` | `3.3.1` | `4.0.0` | ESM-only in v4 | Check webpack config |
+| `copy-webpack-plugin` | `10.2.4` | `14.0.0` | ✅ Done in PR4 | Backward compatible |
+| `webpack-cli` | `5.1.4` | `7.0.3` | ✅ Done in PR4 | Backward compatible |
+| `webpack-dev-server` | `4.7.4` | `5.2.5` | ✅ Done in PR4 | Backward compatible |
+| `postcss-loader` | `6.2.1` | `8.2.1` | ✅ Done in PR4 | Backward compatible |
+| `source-map-loader` | `0.2.4` | `5.0.0` | ✅ Done in PR4 | Backward compatible |
+| `style-loader` | `3.3.1` | `4.0.0` | ✅ Done in PR4 | Backward compatible |
 | `cypress-commands` | `2.0.1` | `3.0.0` | API changes | Check test files |
 | `@simonsmith/cypress-image-snapshot` | `9.0.3` | `10.0.4` | API changes | Check snapshot tests |
 | `cross-env` | `7.0.3` | `10.1.0` | ESM-only in v10 | Check scripts |
@@ -151,13 +151,14 @@ shutterbug, jquery (v3 latest), iframe-phone, style-loader (v3 latest)
 ```
 **Impact:** No code changes required — all used APIs are backward compatible. New exports available (accessibility, jobs, pub/sub, media library, dirty state, custom messages).
 
-### PR 4: Webpack Ecosystem
+### PR 4: Webpack Ecosystem ✅ COMPLETED
+
 ```
 webpack-cli: 5 → 7, webpack-dev-server: 4 → 5, copy-webpack-plugin: 10 → 14,
 css-loader: 6 → 7, style-loader: 3 → 4, postcss-loader: 6 → 8,
 source-map-loader: 0.2 → 5
 ```
-**Risk:** Medium. Config changes needed.
+**Impact:** No config changes required — all packages backward compatible with existing webpack.config.js.
 
 ### PR 5: Testing Infrastructure
 ```
