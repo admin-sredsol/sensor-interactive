@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { getContentHeight, htmlToSlate, SlateEditor, slateToHtml, SlateToolbar } from "@concord-consortium/slate-editor";
+import { useEffect, useRef, useState } from "react";
+import { SlateContainer, EFormat, htmlToSlate, slateToHtml } from "@concord-consortium/slate-editor";
 
-import "@concord-consortium/slate-editor/build/index.css";
+import "@concord-consortium/slate-editor/dist/index.css";
 import "./rich-text-widget.css";
 
 const kThemeColor = "#34a5be";
@@ -24,19 +24,11 @@ export const RichTextWidget = (props: IRichTextProps) => {
   const { id, onBlur } = props;
   const [value, setValue] = useState(htmlToSlate(props.value || ""));
   const [changeCount, setChangeCount] = useState(0);
-  const editorRef = useRef<any>(undefined);
+  const editorRef = useRef<HTMLDivElement>(null);
   const kExtraHeight = 30;
   const kInitialHeight = 50;
   const [height, setHeight] = useState(kInitialHeight);
 
-
-  const handleEditorRef = useCallback((editor: any | null) => {
-    editorRef.current = editor || undefined;
-    if (editor) {
-      // associate label with edit field
-      (editor as any).el.id = id;
-    }
-  }, [id]);
 
   const handleChange = (editorValue: any) => {
     setValue(editorValue);
@@ -50,7 +42,7 @@ export const RichTextWidget = (props: IRichTextProps) => {
   // dynamically resize editor to fit content
   useEffect(() => {
     if (editorRef.current) {
-      const currentHeight: number | undefined = getContentHeight(editorRef.current);
+      const currentHeight = editorRef.current.scrollHeight;
       const desiredHeight = currentHeight ? currentHeight + kExtraHeight : kInitialHeight;
       if (desiredHeight !== height) {
         setHeight(desiredHeight);
@@ -61,28 +53,29 @@ export const RichTextWidget = (props: IRichTextProps) => {
   useEffect(() => {
     setValue(htmlToSlate(props.value || ""));
   }, [props.value]);
+
   return (
     <div className="customRichTextWidget">
-      <SlateToolbar
-        colors={{
-          buttonColors: { fill: "#666666", background: "#FFFFFF" },
-          selectedColors: { fill: "#FFFFFF", background: "#666666" },
-          themeColor: kThemeColor }}
-        order={["bold", "italic", "underlined", "deleted", "superscript", "subscript", "color",
-                "image", "link",
-                "heading1", "heading2", "heading3", "block-quote", "ordered-list", "bulleted-list"]}
-        padding={2}
-        editor={editorRef.current}
-        changeCount={changeCount}
-        />
-      <div className="form-control" style={{ height }}>
-        <SlateEditor
-          className="customRichTextEditor"
-          value={value}
-          onEditorRef={handleEditorRef}
-          onValueChange={handleChange}
-          onBlur={handleBlur}
-        />
-      </div>
+      <SlateContainer
+        value={value}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        toolbar={{
+          colors: {
+            buttonColors: { fill: "#666666", background: "#FFFFFF" },
+            selectedColors: { fill: "#FFFFFF", background: "#666666" },
+            themeColor: kThemeColor
+          },
+          buttons: [
+            EFormat.bold, EFormat.italic, EFormat.underlined, EFormat.deleted,
+            EFormat.superscript, EFormat.subscript, EFormat.color,
+            EFormat.image, EFormat.link,
+            EFormat.heading1, EFormat.heading2, EFormat.heading3,
+            EFormat.blockQuote, EFormat.numberedList, EFormat.bulletedList
+          ],
+          padding: 2
+        }}
+        editorClassName="customRichTextEditor"
+      />
     </div>);
 };

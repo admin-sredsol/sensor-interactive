@@ -59,7 +59,7 @@
     "text-encoding": "^0.7.0"
   },
   "devDependencies": {
-    "@concord-consortium/slate-editor": "^0.7.3",
+    "@concord-consortium/slate-editor": "^0.13.0",
     "@simonsmith/cypress-image-snapshot": "^9.1.0",
     "@types/d3-format": "^1.4.2",
     "@types/dygraphs": "^1.1.13",
