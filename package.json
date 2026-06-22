@@ -46,7 +46,7 @@
     "@concord-consortium/lara-interactive-api": "^1.13.0",
     "@concord-consortium/sensor-connector-interface": "^0.2.0",
     "@vernier/godirect": "^1.7.1",
-    "d3-format": "^1.4.5",
+    "d3-format": "^3.1.2",
     "dygraphs": "^2.2.1",
     "iframe-phone": "^1.4.0",
     "jest-environment-jsdom": "^30.4.1",
@@ -63,7 +63,7 @@
   "devDependencies": {
     "@concord-consortium/slate-editor": "^0.13.0",
     "@simonsmith/cypress-image-snapshot": "^10.0.4",
-    "@types/d3-format": "^1.4.2",
+    "@types/d3-format": "^3.0.4",
     "@types/dygraphs": "^1.1.13",
     "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.24",
