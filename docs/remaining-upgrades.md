@@ -94,10 +94,10 @@ These require significant code changes and careful testing.
 |---------|---------|--------|-------------------|-------|
 | `jquery` | `3.6.0` | `4.0.0` | Removed deprecated APIs, ESM-first | Used in `shutterbug` integration; audit all jQuery usage |
 | `typescript` | `4.9.5` | `5.9.3` | ✅ Done in PR6 (v5); v6 deferred | Stricter type checking; v6 needs config changes |
-| `eslint` | `8.8.0` | `10.5.0` | Flat config required in v9+ | Need new `eslint.config.mjs` |
-| `@typescript-eslint/*` | `5.10.2` | `8.61.1` | Must match eslint v9+ | Upgrade with eslint |
-| `eslint-config-prettier` | `8.3.0` | `10.1.8` | Must match eslint v9+ | Upgrade with eslint |
-| `eslint-plugin-jsdoc` | `37.7.0` | `63.0.7` | Major API changes | Upgrade with eslint |
+| `eslint` | `8.8.0` | `9.39.4` | ✅ Done in PR7 | Flat config required; migrated to eslint.config.mjs |
+| `@typescript-eslint/*` | `5.10.2` | `8.35.0` | ✅ Done in PR7 | Upgraded with eslint v9 |
+| `eslint-config-prettier` | `8.3.0` | `10.1.8` | ✅ Done in PR7 | Upgraded with eslint |
+| `eslint-plugin-jsdoc` | `37.7.0` | `63.0.0` | ✅ Done in PR7 | Removed newline-after-description rule |
 | `@concord-consortium/lara-interactive-api` | `1.7.0` | `1.13.0` | ✅ Done in PR3 | Backward compatible; no code changes needed |
 | `@concord-consortium/slate-editor` | `0.7.3` | `0.13.0` | ✅ Done in PR2 | Major rewrite, React 18+ required |
 
@@ -177,12 +177,13 @@ typescript: 4.9.5 → 5.9.3
 **Impact:** No code changes required. Zero source errors with TS 5.9.
 **Note:** TypeScript 6.0 was attempted but requires config changes (`rootDir`, `moduleResolution`, `lib`). Deferred to a separate PR.
 
-### PR 7: ESLint v9 + Flat Config
+### PR 7: ESLint v9 + Flat Config ✅ COMPLETED
+
 ```
 eslint: 8 → 9, @typescript-eslint/*: 5 → 8, eslint-config-prettier: 8 → 10,
 eslint-plugin-jsdoc: 37 → 63
 ```
-**Risk:** Medium. Requires new `eslint.config.mjs` file.
+**Impact:** Migrated from `.eslintrc.js` to `eslint.config.mjs` (flat config). Added `typescript-eslint` package. Removed deprecated `jsdoc/newline-after-description` rule. All rule severities preserved from original config.
 
 ### PR 8: jQuery v4
 ```
